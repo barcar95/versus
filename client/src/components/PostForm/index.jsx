@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 import { useMutation } from "@apollo/client";
 import { ADD_POST } from "../../utils/mutations";
-
+import { QUERY_USERPOSTS, QUERY_ME } from "../../utils/queries"
 import Auth from "../../utils/auth";
 
 function PostForm() {
@@ -14,11 +14,12 @@ function PostForm() {
     post2: "",
     username: "",
   });
-  const [addPost] = useMutation(ADD_POST);
+  const [addPost] = useMutation(ADD_POST, {
+    refetchQueries: [QUERY_USERPOSTS, "userPosts", QUERY_ME, "me"]
+  });
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log(addPost);
     try {
       const { data } = await addPost({
         variables: {
